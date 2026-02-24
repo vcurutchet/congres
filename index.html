@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enregistrement Congrès</title>
+    <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f4f7f9; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        
+        .logo { display: block; margin: 0 auto 20px auto; max-width: 200px; height: auto; }
+        
+        h2 { color: #0070d2; font-size: 1.6em; margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; text-align: left; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #dddbda; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        input:focus { border-color: #0070d2; outline: none; box-shadow: 0 0 4px rgba(0,112,210,0.5); }
+        
+        .btn { background-color: #0070d2; color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        .btn:hover { background-color: #005fb2; }
+        
+        .footer { text-align: center; font-size: 12px; color: #706e6b; margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://kairosandyou.fr/wp-content/uploads/2022/12/timkl-logo.png" alt="Timkl Logo" class="logo">
+    
+    <h2 id="event-name">Enregistrement Visite</h2>
+    
+    <form action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dbg000002I0Ev" method="POST">
+
+        <input type="hidden" name="oid" value="00Dbg000002I0Ev">
+        <input type="hidden" name="retURL" id="retURL_field" value="">
+        <input type="hidden" name="Campaign_ID" id="campaign_id_field" value="">
+
+        <label for="first_name">Prénom</label>
+        <input id="first_name" name="first_name" type="text" required placeholder="Jean" />
+
+        <label for="last_name">Nom</label>
+        <input id="last_name" name="last_name" type="text" required placeholder="Dupont" />
+
+        <label for="email">Email professionnel</label>
+        <input id="email" name="email" type="email" required placeholder="jean.dupont@mail.com" />
+
+        <label for="company">Établissement / Société</label>
+        <input id="company" name="company" type="text" required placeholder="Ex: CHU de Paris" />
+
+        <button type="submit" class="btn">Valider ma présence</button>
+
+        <p class="footer">Les données sont transmises de manière sécurisée à Kairos & You.</p>
+    </form>
+</div>
+
+<script>
+    // Lecture des paramètres de l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // 1. Gestion de l'ID Campagne
+    const campId = urlParams.get('id');
+    const campField = document.getElementById('campaign_id_field');
+    if (campId) {
+        campField.value = campId;
+    } else {
+        campField.value = "701bg00000PjhEYAAZ"; // Ton ID par défaut
+    }
+
+    // 2. Gestion du Nom de l'événement
+    const eventName = urlParams.get('event');
+    if (eventName) {
+        document.getElementById('event-name').innerText = eventName;
+    }
+
+    // 3. Configuration du rechargement automatique (Mode Tablette)
+    document.getElementById('retURL_field').value = window.location.href;
+</script>
+
+</body>
+</html>
