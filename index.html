@@ -8,13 +8,19 @@
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f4f7f9; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
         .logo { display: block; margin: 0 auto 20px auto; max-width: 200px; height: auto; }
-        h2 { color: #0070d2; font-size: 1.6em; margin-bottom: 25px; }
+        h2 { color: #0070d2; font-size: 1.6em; margin-bottom: 25px; transition: all 0.3s; }
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; text-align: left; }
-        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #dddbda; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
-        input:focus { border-color: #0070d2; outline: none; box-shadow: 0 0 4px rgba(0,112,210,0.5); }
-        .btn { background-color: #0070d2; color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #dddbda; border-radius: 4px; box-sizing: border-box; font-size: 16px; font-family: inherit; }
+        input:focus, textarea:focus { border-color: #0070d2; outline: none; box-shadow: 0 0 4px rgba(0,112,210,0.5); }
+        .btn { background-color: #0070d2; color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
         .btn:hover { background-color: #005fb2; }
+        .btn-secondary { background-color: #f3f3f3; color: #706e6b; font-size: 14px; padding: 8px; margin-top: 15px; border: 1px solid #dddbda; }
         .footer { text-align: center; font-size: 12px; color: #706e6b; margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
+        
+        /* Gestion des étapes */
+        .step-hidden { display: none; }
+        .progress-bar { height: 4px; width: 100%; background: #eee; margin-bottom: 20px; border-radius: 2px; }
+        .progress-fill { height: 100%; width: 50%; background: #0070d2; border-radius: 2px; transition: width 0.3s; }
     </style>
 </head>
 <body>
@@ -22,57 +28,79 @@
 <div class="container">
     <img src="https://kairosandyou.fr/wp-content/uploads/2022/12/timkl-logo.png" alt="Timkl Logo" class="logo">
     
-    <h2 id="event-name">Enregistrement congrès</h2>
+    <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+    <h2 id="display-title">Enregistrement Congrès</h2>
     
-    <form action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
+    <form id="leadForm" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
 
         <input type="hidden" name="oid" value="00Dbg000002I0Ev">
         <input type="hidden" name="retURL" id="retURL_field" value="">
         <input type="hidden" name="Campaign_ID" id="campaign_id_field" value="">
 
-        <label for="first_name">Prénom</label>
-        <input id="first_name" name="first_name" type="text" maxlength="40" required placeholder="Jean" />
+        <div id="section1">
+            <label for="first_name">Prénom</label>
+            <input id="first_name" name="first_name" type="text" maxlength="40" required placeholder="Jean" />
 
-        <label for="last_name">Nom</label>
-        <input id="last_name" name="last_name" type="text" maxlength="80" required placeholder="Dupont" />
+            <label for="last_name">Nom</label>
+            <input id="last_name" name="last_name" type="text" maxlength="80" required placeholder="Dupont" />
 
-        <label for="email">Email professionnel</label>
-        <input id="email" name="email" type="email" maxlength="80" required placeholder="jean.dupont@mail.com" />
+            <label for="email">Email professionnel</label>
+            <input id="email" name="email" type="email" maxlength="80" required placeholder="jean.dupont@mail.com" />
 
-        <label for="company">Établissement / Société</label>
-        <input id="company" name="company" type="text" maxlength="40" required placeholder="Ex: CHU de Paris" />
+            <label for="company">Établissement / Société</label>
+            <input id="company" name="company" type="text" maxlength="40" required placeholder="Ex: CHU de Paris" />
 
-        <button type="submit" class="btn">Valider ma présence</button>
+            <button type="button" class="btn" onclick="goToStep2()">Suivant</button>
+        </div>
+
+        <div id="section2" class="step-hidden">
+            <label for="description">Description / Notes de visite</label>
+            <textarea id="description" name="description" rows="5" placeholder="Précisez le besoin ou le contexte..."></textarea>
+
+            <button type="submit" class="btn">Valider ma présence</button>
+            <button type="button" class="btn btn-secondary" onclick="goToStep1()">← Retour aux infos</button>
+        </div>
 
         <p class="footer">
-            Les données saisies sont transmises de manière sécurisée et enregistrées dans notre logiciel de suivi.
+            Données sécurisées | Enregistrement CRM Timkl
         </p>
     </form>
 </div>
 
 <script>
-    // 1. Lecture des paramètres de l'URL
     const urlParams = new URLSearchParams(window.location.search);
+    const originalEventName = urlParams.get('event') ? decodeURIComponent(urlParams.get('event')) : "Enregistrement Congrès";
     
-    // 2. Gestion de l'ID Campagne (Paramètre 'id')
+    // Initialisation du titre
+    document.getElementById('display-title').innerText = originalEventName;
+
+    // 1. Logique de navigation
+    function goToStep2() {
+        // Vérification simple avant de passer à la suite
+        const fName = document.getElementById('first_name').value;
+        const lName = document.getElementById('last_name').value;
+        const email = document.getElementById('email').value;
+
+        if(fName && lName && email) {
+            document.getElementById('section1').classList.add('step-hidden');
+            document.getElementById('section2').classList.remove('step-hidden');
+            document.getElementById('progress').style.width = "100%";
+            document.getElementById('display-title').innerText = "Un dernier mot ?";
+        } else {
+            alert("Veuillez remplir les champs obligatoires (Prénom, Nom, Email).");
+        }
+    }
+
+    function goToStep1() {
+        document.getElementById('section2').classList.add('step-hidden');
+        document.getElementById('section1').classList.remove('step-hidden');
+        document.getElementById('progress').style.width = "50%";
+        document.getElementById('display-title').innerText = originalEventName;
+    }
+
+    // 2. Gestion Salesforce (ID Campagne & Redirection)
     const campId = urlParams.get('id');
-    const campField = document.getElementById('campaign_id_field');
-    
-    if (campId && campId.trim() !== "") {
-        campField.value = campId;
-    } else {
-        // ID par défaut si rien n'est passé dans l'URL
-        campField.value = "701bg00000PjhEYAAZ"; 
-    }
-
-    // 3. Gestion du Titre Dynamique (Paramètre 'event')
-    const eventName = urlParams.get('event');
-    if (eventName) {
-        document.getElementById('event-name').innerText = decodeURIComponent(eventName);
-    }
-
-    // 4. Mode Tablette : On renvoie l'utilisateur sur la même page après validation
-    // On garde les paramètres actuels de l'URL (ID et Event) pour le prochain utilisateur
+    document.getElementById('campaign_id_field').value = campId || "701bg00000PjhEYAAZ";
     document.getElementById('retURL_field').value = window.location.href;
 </script>
 
