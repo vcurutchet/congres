@@ -68,7 +68,7 @@
             <label for="description">Description / Notes de visite</label>
             <textarea id="description" name="description" rows="5" placeholder="Précisez le besoin ou le contexte..."></textarea>
 
-            <button type="submit" class="btn">Valider ma présence</button>
+            <button type="submit" class="btn">Valider</button>
             <button type="button" class="btn btn-secondary" onclick="goToStep1()">← Retour aux infos</button>
         </div>
 
@@ -97,7 +97,7 @@
             document.getElementById('section1').classList.add('step-hidden');
             document.getElementById('section2').classList.remove('step-hidden');
             document.getElementById('progress').style.width = "100%";
-            document.getElementById('display-title').innerText = "Précisions";
+            document.getElementById('display-title').innerText = "Détails de la visite";
         } else {
             alert("Veuillez remplir tous les champs obligatoires.");
         }
