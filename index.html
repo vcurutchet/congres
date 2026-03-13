@@ -8,32 +8,27 @@
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f4f7f9; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
         .logo { display: block; margin: 0 auto 20px auto; max-width: 200px; height: auto; }
-        h2 { color: #0070d2; font-size: 1.6em; margin-bottom: 25px; transition: all 0.3s; }
+        h2 { color: #0070d2; font-size: 1.6em; margin-bottom: 25px; }
         
-        /* Style des labels et astérisques */
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; text-align: left; }
         .required::after { content: " *"; color: #ff4d4d; }
         
-        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #dddbda; border-radius: 4px; box-sizing: border-box; font-size: 16px; font-family: inherit; background-color: white; }
+        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #dddbda; border-radius: 4px; box-sizing: border-box; font-size: 16px; font-family: inherit; }
         input:focus, textarea:focus, select:focus { border-color: #0070d2; outline: none; box-shadow: 0 0 4px rgba(0,112,210,0.5); }
         
-        .btn { background-color: #0070d2; color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+        .btn { background-color: #0070d2; color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; display: block; }
         .btn:hover { background-color: #005fb2; }
-        .btn-secondary { background-color: #f3f3f3; color: #706e6b; font-size: 14px; padding: 8px; margin-top: 15px; border: 1px solid #dddbda; }
-        .footer { text-align: center; font-size: 12px; color: #706e6b; margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
+        .btn-secondary { background-color: #f3f3f3; color: #706e6b; font-size: 14px; padding: 8px; margin-top: 15px; border: 1px solid #dddbda; width: 100%; cursor: pointer; }
         
+        .footer { text-align: center; font-size: 12px; color: #706e6b; margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
         .step-hidden { display: none; }
-        .progress-bar { height: 4px; width: 100%; background: #eee; margin-bottom: 20px; border-radius: 2px; }
-        .progress-fill { height: 100%; width: 50%; background: #0070d2; border-radius: 2px; transition: width 0.3s; }
+        .success-icon { font-size: 50px; color: #2e844a; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <img src="https://kairosandyou.fr/wp-content/uploads/2022/12/timkl-logo.png" alt="Timkl Logo" class="logo">
-    
-    <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
-    <h2 id="display-title">Enregistrement Congrès</h2>
     
     <form id="leadForm" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
 
@@ -43,31 +38,40 @@
         <input type="hidden" name="lead_source" value="Congres">
 
         <div id="section1">
+            <h2 id="display-title">Enregistrement</h2>
             <label for="first_name" class="required">Prénom</label>
-            <input id="first_name" name="first_name" type="text" maxlength="40" required placeholder="Jean" />
+            <input id="first_name" name="first_name" type="text" required />
 
             <label for="last_name" class="required">Nom</label>
-            <input id="last_name" name="last_name" type="text" maxlength="80" required placeholder="Dupont" />
+            <input id="last_name" name="last_name" type="text" required />
 
             <label for="email" class="required">Email professionnel</label>
-            <input id="email" name="email" type="email" maxlength="80" required placeholder="jean.dupont@mail.com" />
+            <input id="email" name="email" type="email" required />
 
             <label for="phone">Téléphone</label>
-            <input id="phone" name="phone" type="tel" maxlength="40" placeholder="06 00 00 00 00" />
+            <input id="phone" name="phone" type="tel" placeholder="Optionnel" />
 
             <label for="company" class="required">Établissement / Société</label>
-            <input id="company" name="company" type="text" maxlength="40" required placeholder="Ex: CHU de Paris" />
+            <input id="company" name="company" type="text" required />
 
             <label for="zip" class="required">Code Postal</label>
-            <input id="zip" name="zip" type="text" maxlength="20" required placeholder="75001" />
+            <input id="zip" name="zip" type="text" required />
 
-            <button type="button" class="btn" onclick="goToStep2()">Suivant</button>
+            <button type="button" class="btn" onclick="goToStepMerci()">Suivant</button>
         </div>
 
-        <div id="section2" class="step-hidden">
+        <div id="sectionMerci" class="step-hidden">
+            <div class="success-icon">✓</div>
+            <h2>Merci !</h2>
+            <p style="color: #706e6b; margin-bottom: 30px;">Nous avons bien noté votre présence. Pourriez-vous nous en dire un peu plus ?</p>
+            <button type="button" class="btn" onclick="goToStepFinal()">Terminer l'enregistrement</button>
+        </div>
+
+        <div id="sectionFinal" class="step-hidden">
+            <h2>Précisions</h2>
             <label for="industry" class="required">Secteur d'activité</label>
             <select id="industry" name="industry" required>
-                <option value="" disabled selected>-- Choisir un secteur --</option>
+                <option value="" disabled selected>-- Choisir --</option>
                 <option value="Pharmacie">Pharmacie</option>
                 <option value="CHU">CHU</option>
                 <option value="Cabinet libéral">Cabinet libéral</option>
@@ -75,25 +79,22 @@
             </select>
 
             <label for="description">Description / Notes de visite</label>
-            <textarea id="description" name="description" rows="5" placeholder="Précisez le besoin ou le contexte..."></textarea>
+            <textarea id="description" name="description" rows="5" placeholder="Besoin spécifique..."></textarea>
 
-            <button type="submit" class="btn">Valider</button>
-            <button type="button" class="btn btn-secondary" onclick="goToStep1()">← Retour aux infos</button>
+            <button type="submit" class="btn">Valider et Envoyer</button>
+            <button type="button" class="btn btn-secondary" onclick="backToMerci()">← Retour</button>
         </div>
 
-        <p class="footer">
-            Données sécurisées | Enregistrement CRM Timkl
-        </p>
+        <p class="footer">Données sécurisées | Timkl CRM</p>
     </form>
 </div>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const originalEventName = urlParams.get('event') ? decodeURIComponent(urlParams.get('event')) : "Enregistrement Congrès";
-    document.getElementById('display-title').innerText = originalEventName;
+    const eventName = urlParams.get('event') ? decodeURIComponent(urlParams.get('event')) : "Enregistrement";
+    document.getElementById('display-title').innerText = eventName;
 
-    function goToStep2() {
-        // Le téléphone est exclu de la liste de validation
+    function goToStepMerci() {
         const requiredFields = ['first_name', 'last_name', 'email', 'company', 'zip'];
         let allValid = true;
         
@@ -109,24 +110,27 @@
 
         if(allValid) {
             document.getElementById('section1').classList.add('step-hidden');
-            document.getElementById('section2').classList.remove('step-hidden');
-            document.getElementById('progress').style.width = "100%";
-            document.getElementById('display-title').innerText = "Détails de la visite";
+            document.getElementById('sectionMerci').classList.remove('step-hidden');
         } else {
-            alert("Veuillez remplir les champs obligatoires signalés par un astérisque (*).");
+            alert("Merci de remplir les champs obligatoires (*)");
         }
     }
 
-    function goToStep1() {
-        document.getElementById('section2').classList.add('step-hidden');
-        document.getElementById('section1').classList.remove('step-hidden');
-        document.getElementById('progress').style.width = "50%";
-        document.getElementById('display-title').innerText = originalEventName;
+    function goToStepFinal() {
+        document.getElementById('sectionMerci').classList.add('step-hidden');
+        document.getElementById('sectionFinal').classList.remove('step-hidden');
     }
 
+    function backToMerci() {
+        document.getElementById('sectionFinal').classList.add('step-hidden');
+        document.getElementById('sectionMerci').classList.remove('step-hidden');
+    }
+
+    // Configuration Salesforce
     const campId = urlParams.get('id');
     document.getElementById('campaign_id_field').value = campId || "701bg00000PjhEYAAZ";
-    document.getElementById('retURL_field').value = window.location.href;
+    // Après l'envoi, on recharge la page proprement pour le suivant
+    document.getElementById('retURL_field').value = window.location.origin + window.location.pathname + "?id=" + (campId || "") + "&event=" + encodeURIComponent(eventName);
 </script>
 
 </body>
