@@ -16,10 +16,17 @@
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #dddbda; border-radius: 4px; box-sizing: border-box; font-size: 16px; font-family: inherit; }
         input:focus, textarea:focus, select:focus { border-color: #0070d2; outline: none; box-shadow: 0 0 4px rgba(0,112,210,0.5); }
         
+        /* Bouton principal bleu */
         .btn { background-color: #0070d2; color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; display: block; }
         .btn:hover { background-color: #005fb2; }
+        
+        /* Bouton secondaire gris */
         .btn-secondary { background-color: #f3f3f3; color: #706e6b; font-size: 14px; padding: 8px; margin-top: 15px; border: 1px solid #dddbda; width: 100%; cursor: pointer; }
         
+        /* Bouton "invisible" pour la transition discrète */
+        .btn-invisible { background: none; border: none; color: #b5b5b5; text-decoration: none; font-size: 13px; padding: 10px; cursor: pointer; display: inline-block; width: auto; margin-top: 20px; }
+        .btn-invisible:hover { color: #706e6b; text-decoration: underline; }
+
         .footer { text-align: center; font-size: 12px; color: #706e6b; margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
         .step-hidden { display: none; }
         .success-icon { font-size: 50px; color: #2e844a; margin-bottom: 15px; }
@@ -63,8 +70,9 @@
         <div id="sectionMerci" class="step-hidden">
             <div class="success-icon">✓</div>
             <h2>Merci !</h2>
-            <p style="color: #706e6b; margin-bottom: 30px;">Nous vous contacterons rapidement.</p>
-            <button type="button" class="btn" onclick="goToStepFinal()">Terminer</button>
+            <p style="color: #706e6b; margin-bottom: 10px;">Nous vous contacterons rapidement.</p>
+            
+            <button type="button" class="btn-invisible" onclick="goToStepFinal()">Ajouter des détails sur l'échange</button>
         </div>
 
         <div id="sectionFinal" class="step-hidden">
@@ -93,10 +101,12 @@
 </div>
 
 <script>
+    // Gestion du titre dynamique via l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const eventName = urlParams.get('event') ? decodeURIComponent(urlParams.get('event')) : "Enregistrement";
     document.getElementById('display-title').innerText = eventName;
 
+    // Navigation Étape 1 -> Étape 2
     function goToStepMerci() {
         const requiredFields = ['first_name', 'last_name', 'email', 'company', 'zip'];
         let allValid = true;
@@ -119,20 +129,23 @@
         }
     }
 
+    // Navigation Étape 2 -> Étape 3
     function goToStepFinal() {
         document.getElementById('sectionMerci').classList.add('step-hidden');
         document.getElementById('sectionFinal').classList.remove('step-hidden');
     }
 
+    // Navigation Retour
     function backToMerci() {
         document.getElementById('sectionFinal').classList.add('step-hidden');
         document.getElementById('sectionMerci').classList.remove('step-hidden');
     }
 
-    // Configuration Salesforce
+    // Configuration Salesforce (ID de campagne et URL de retour)
     const campId = urlParams.get('id');
     document.getElementById('campaign_id_field').value = campId || "701bg00000PjhEYAAZ";
-    // Après l'envoi, on recharge la page proprement pour le suivant
+    
+    // Calcul de la retURL pour boucler sur le formulaire vide après soumission
     document.getElementById('retURL_field').value = window.location.origin + window.location.pathname + "?id=" + (campId || "") + "&event=" + encodeURIComponent(eventName);
 </script>
 
