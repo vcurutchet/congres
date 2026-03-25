@@ -37,9 +37,9 @@
 <div class="container">
     <img src="https://kairosandyou.fr/wp-content/uploads/2022/12/timkl-logo.png" alt="Timkl Logo" class="logo">
     
-    <form id="leadForm" action="https://login.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
+    <form id="leadForm" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
 
-        <input type="hidden" name="oid" value="00D7Q000000JyuI">
+        <input type="hidden" name="oid" value="00Dbg000002I0Ev">
         <input type="hidden" name="retURL" id="retURL_field" value="">
         <input type="hidden" name="Campaign_ID" id="campaign_id_field" value="">
         <input type="hidden" name="lead_source" value="Congres">
@@ -61,8 +61,8 @@
             <label for="company" class="required">Établissement / Société</label>
             <input id="company" name="company" type="text" required />
 
-            <label for="zip" class="required">Code Postal</label>
-            <input id="zip" name="zip" type="text" required />
+            <label for="zip" class="required">Département</label>
+            <input id="state" name="state" type="text" required />
 
             <button type="button" class="btn" onclick="goToStepMerci()">Suivant</button>
         </div>
