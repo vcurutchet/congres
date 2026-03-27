@@ -62,6 +62,8 @@
             <label for="state" class="required">Département</label>
             <input id="state" maxlength="2" name="state" size="2" type="text" required />
 
+            <p class="footer">*mentions obligatoires. Vos données sont traitées par timkl (voir politique de confidentialité) afin de répondre à votre demande sur la base de notre intérêt légitime de communication. Elles seront traitées par nos salariés et prestataires et conservées pour une durée de 3 ans maximum à compter de votre dernier contact. Vous pouvez y accéder, les rectifier, demander leur effacement, vous opposer ou demander la limitation du traitement en contactant dpo.timkl@timkl.fr. Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL.</p>
+
             <button type="button" class="btn" onclick="goToStepMerci()">Suivant</button>
         </div>
 
@@ -93,7 +95,6 @@
             <button type="button" class="btn btn-secondary" onclick="backToMerci()">← Retour</button>
         </div>
 
-        <p class="footer">*mentions obligatoires. Vos données sont traitées par timkl (voir politique de confidentialité) afin de répondre à votre demande sur la base de notre intérêt légitime de communication. Elles seront traitées par nos salariés et prestataires et conservées pour une durée de 3 ans maximum à compter de votre dernier contact. Vous pouvez y accéder, les rectifier, demander leur effacement, vous opposer ou demander la limitation du traitement en contactant dpo.timkl@timkl.fr. Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL.</p>
     </form>
 </div>
 
@@ -103,7 +104,6 @@
     document.getElementById('display-title').innerText = eventName;
 
     function goToStepMerci() {
-        // CORRECTION : On remplace 'zip' par 'state'
         const requiredFields = ['first_name', 'last_name', 'email', 'company', 'state'];
         let allValid = true;
         
